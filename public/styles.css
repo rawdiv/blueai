@@ -376,11 +376,212 @@ nav a.cta-btn:hover {
   color: #f3f4f6;
 }
 
+.cta-btn.beautiful {
+  background: linear-gradient(90deg, #ffe259 0%, #ffa751 100%);
+  color: #222 !important;
+  font-size: 1.25rem;
+  font-weight: 800;
+  padding: 1.1em 2.8em;
+  border-radius: 2.5em;
+  box-shadow: 0 4px 24px rgba(255, 200, 80, 0.25);
+  border: none;
+  transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 8px rgba(255,255,255,0.10);
+  display: inline-block;
+}
+.cta-btn.beautiful:hover {
+  background: linear-gradient(90deg, #fff6a9 0%, #ffd580 100%);
+  color: #111 !important;
+  box-shadow: 0 6px 32px rgba(255, 200, 80, 0.35);
+  text-decoration: none;
+}
+
+/* Responsive card grids */
+@media (max-width: 900px) {
+  .features-grid, .pricing-table, .testimonials-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+  .pricing-table, .testimonials-grid {
+    align-items: center;
+    justify-content: center;
+  }
+  .testimonial-card, .pricing-card {
+    margin: 0 auto;
+    max-width: 350px;
+    width: 100%;
+  }
+}
+
+/* Scroll animation classes */
+.animated {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+}
+.animated.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Pulse animation for hero button */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 200, 80, 0.25); }
+  70% { box-shadow: 0 0 0 16px rgba(255, 200, 80, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 200, 80, 0); }
+}
+.cta-btn.beautiful {
+  animation: pulse 2.2s infinite;
+}
+
+.typewriter {
+  border-right: 2px solid #ffe259;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  animation: blink-cursor 0.8s steps(1) infinite;
+}
+@keyframes blink-cursor {
+  0%, 100% { border-color: #ffe259; }
+  50% { border-color: transparent; }
+}
+
 @media (max-width: 800px) {
   .header-flex {
     flex-direction: row;
     align-items: center;
     gap: 1rem;
     padding: 0 0.7rem;
+  }
+} 
+
+.site-header.glass-nav {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  background: rgba(30, 34, 40, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 2px 16px rgba(30, 60, 180, 0.10);
+}
+.nav-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0.7rem 2rem;
+}
+.logo {
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -1px;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+.nav-links a.cta-btn.beautiful {
+  margin-left: 2rem;
+}
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 120;
+}
+.hamburger span {
+  display: block;
+  width: 26px;
+  height: 3px;
+  margin: 4px 0;
+  background: #fff;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+.sidebar {
+  display: none;
+}
+.sidebar-backdrop {
+  display: none;
+}
+@media (max-width: 900px) {
+  .nav-links {
+    display: none;
+  }
+  .hamburger {
+    display: flex;
+  }
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 75vw;
+    max-width: 320px;
+    background: rgba(30, 34, 40, 0.75);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 4px 0 32px rgba(30, 60, 180, 0.10);
+    z-index: 200;
+    padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+  }
+  body.sidebar-open .sidebar {
+    transform: translateX(0);
+  }
+  .sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .sidebar nav a {
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .sidebar nav a.cta-btn.beautiful {
+    margin-left: 0;
+    margin-top: 1.5rem;
+  }
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    z-index: 150;
+    opacity: 1;
+    transition: opacity 0.2s;
+  }
+  body.sidebar-open .sidebar-backdrop {
+    opacity: 1;
+    pointer-events: all;
+  }
+  body:not(.sidebar-open) .sidebar-backdrop {
+    opacity: 0;
+    pointer-events: none;
   }
 } 
