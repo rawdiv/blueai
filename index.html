@@ -11,9 +11,11 @@
   <main>
     <section class="hero">
       <div class="container">
-        <h1>Blue Mind – The Future of Private AI</h1>
-        <p class="subtitle">Think Loud. Stay Private.<br>Blue Mind is an intelligent GPT assistant that respects your privacy by design. It never stores your data, never uses your chats for training, and always acts on your behalf — not behind your back. Built for those who want true AI power without surveillance, Blue Mind is fast, capable, and completely memory-free.</p>
-        <a href="https://bluemind.onrender.com/" class="cta-btn large">Try for Free</a>
+        <h1>
+          <span class="typewriter"></span>
+          <span class="hero-title-mobile" style="display:none;">Blue Mind – The Future of Private AI</span>
+        </h1>
+        <a href="https://bluemind.onrender.com/" class="cta-btn large beautiful">Try for Free</a>
       </div>
     </section>
     <section class="features" id="features">
@@ -21,23 +23,23 @@
         <h2>What Makes Blue Mind Different</h2>
         <p class="section-desc">Blue Mind is built to <strong>act</strong>, not just chat. From advanced automation to real-world action, it's designed as your personal AI agent — available across platforms and focused on results.</p>
         <div class="features-grid">
-          <div class="feature-card">
+          <div class="feature-card animated">
             <h3>Agentic AI That Acts</h3>
             <p>Ask it to find people interested in a product and send them emails. Request outreach tasks, data searches, or campaign actions — and it executes. It’s an AI that doesn’t just answer, it <em>works</em>.</p>
           </div>
-          <div class="feature-card">
+          <div class="feature-card animated">
             <h3>YouTube Video Understanding</h3>
             <p>Paste a video link and ask questions like “List all the places shown,” “Summarize the storyline,” or “Extract key quotes.” It analyzes and delivers.</p>
           </div>
-          <div class="feature-card">
+          <div class="feature-card animated">
             <h3>Cross-Platform Access</h3>
             <p>Use Blue Mind across web, WhatsApp, or even phone calls. You can talk to it via chat, voice note, or speak live — it listens and responds like a human.</p>
           </div>
-          <div class="feature-card">
+          <div class="feature-card animated">
             <h3>Privacy-First by Design</h3>
             <p>It does not track, store, or remember any messages. Everything disappears after the session. Blue Mind is built on <strong>public knowledge only</strong>, never on private data.</p>
           </div>
-          <div class="feature-card">
+          <div class="feature-card animated">
             <h3>Custom Tone & Persona</h3>
             <p>Talk to your AI your way — let it be your chill buddy, sharp consultant, or professional assistant. It adapts its tone to suit your needs and style.</p>
           </div>
@@ -47,7 +49,7 @@
     <section class="founder-message">
       <div class="container">
         <h2>A Message from Our Founder</h2>
-        <blockquote>
+        <blockquote class="animated">
           <p><em>At Blue Mind, we didn’t want to build another AI that just talks — we wanted to build one you could trust. Most AI systems today log your messages, store your conversations, and train on your inputs. Ours doesn’t.</em></p>
           <p><em>We believe privacy is not a setting — it’s a principle. Blue Mind was built for people who want power without compromise. For founders, creators, operators, and everyday users who want AI to act — and forget.</em></p>
           <footer>— <strong>Divyansh</strong>, Founder &amp; CEO, Blue Mind</footer>
@@ -59,7 +61,7 @@
         <h2>Pricing</h2>
         <p class="section-desc">Built to be affordable for everyone.</p>
         <div class="pricing-table">
-          <div class="pricing-card">
+          <div class="pricing-card animated">
             <h3>Starter</h3>
             <div class="price">₹199<span>/month</span></div>
             <ul>
@@ -68,7 +70,7 @@
               <li>Basic action tasks</li>
             </ul>
           </div>
-          <div class="pricing-card popular">
+          <div class="pricing-card animated popular">
             <h3>Pro</h3>
             <div class="price">₹499<span>/month</span></div>
             <ul>
@@ -78,7 +80,7 @@
               <li>WhatsApp and voice note integration</li>
             </ul>
           </div>
-          <div class="pricing-card">
+          <div class="pricing-card animated">
             <h3>Enterprise</h3>
             <div class="price">Custom</div>
             <ul>
@@ -96,23 +98,23 @@
       <div class="container">
         <h2>Why Users Choose Blue Mind</h2>
         <div class="testimonials-grid">
-          <div class="testimonial-card">
+          <div class="testimonial-card animated">
             <p>“Finally, an AI that doesn’t feel creepy or invasive.”</p>
           </div>
-          <div class="testimonial-card">
+          <div class="testimonial-card animated">
             <p>“I asked it to scan a YouTube travel vlog — it listed every location instantly.”</p>
           </div>
-          <div class="testimonial-card">
+          <div class="testimonial-card animated">
             <p>“It helped me find and email 50 potential leads in minutes. Unreal.”</p>
           </div>
         </div>
       </div>
     </section>
     <section class="cta-final" id="cta-final">
-      <div class="container">
+      <div class="container animated">
         <h2>Ready to Take Control?</h2>
         <p>Experience a GPT that actually listens, acts, and disappears. Get started today with the most privacy-respecting, voice-enabled, cross-platform AI assistant built for modern users.</p>
-        <a href="#" class="cta-btn large">Try for ₹199</a>
+        <a href="https://bluemind.onrender.com/" class="cta-btn large beautiful">Try for Free</a>
       </div>
     </section>
   </main>
@@ -126,5 +128,45 @@
       </div>
     </div>
   </footer>
+<script>
+// Scroll animation for .animated elements
+function onScrollAnimate() {
+  document.querySelectorAll('.animated').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 60) {
+      el.classList.add('visible');
+    }
+  });
+}
+window.addEventListener('scroll', onScrollAnimate);
+window.addEventListener('DOMContentLoaded', onScrollAnimate);
+
+// Typewriter animation for hero title (desktop only)
+function handleHeroTitle() {
+  const typewriter = document.querySelector('.typewriter');
+  const mobileTitle = document.querySelector('.hero-title-mobile');
+  const text = 'Blue Mind – The Future of Private AI';
+  if (window.innerWidth > 900) {
+    typewriter.style.display = '';
+    mobileTitle.style.display = 'none';
+    if (!typewriter.textContent) {
+      let i = 0;
+      function type() {
+        if (i <= text.length) {
+          typewriter.textContent = text.slice(0, i);
+          i++;
+          setTimeout(type, 60);
+        }
+      }
+      type();
+    }
+  } else {
+    typewriter.style.display = 'none';
+    mobileTitle.style.display = '';
+  }
+}
+window.addEventListener('DOMContentLoaded', handleHeroTitle);
+window.addEventListener('resize', handleHeroTitle);
+</script>
 </body>
 </html> 
