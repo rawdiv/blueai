@@ -4,43 +4,154 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blue Mind Admin Panel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { background: #181c24; color: #fff; font-family: 'Manrope', Arial, sans-serif; margin: 0; padding: 0; }
-    .container { max-width: 500px; margin: 2.5rem auto; background: rgba(255,255,255,0.07); border-radius: 1.2rem; box-shadow: 0 4px 32px rgba(30,60,180,0.18); padding: 2.5rem 2rem; }
-    h1, h2 { text-align: center; }
-    input, button, textarea { width: 100%; padding: 0.7em; margin: 0.5em 0 1em 0; border-radius: 0.5em; border: none; font-size: 1rem; }
-    button { background: linear-gradient(90deg, #ffe259 0%, #ffa751 100%); color: #222; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    :root {
+      --primary: #ffe259;
+      --primary-dark: #ffa751;
+      --bg: #181c24;
+      --bg-card: rgba(255,255,255,0.07);
+      --bg-sidebar: rgba(30,34,40,0.85);
+      --text: #fff;
+      --text-dark: #222;
+      --accent: #3b82f6;
+      --danger: #ff6b6b;
+    }
+    body {
+      margin: 0; padding: 0; font-family: 'Manrope', Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    .admin-layout {
+      display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px; background: var(--bg-sidebar); display: flex; flex-direction: column; align-items: center; padding: 2rem 0 1rem 0; box-shadow: 2px 0 16px rgba(30,60,180,0.10); }
+    .sidebar .logo { font-size: 1.5rem; font-weight: 800; margin-bottom: 2.5rem; letter-spacing: -1px; color: var(--primary); }
+    .sidebar nav { width: 100%; }
+    .sidebar nav a {
+      display: flex; align-items: center; gap: 1rem; color: var(--text); text-decoration: none; font-weight: 600; padding: 0.9rem 2rem; border-left: 4px solid transparent; transition: background 0.2s, border-color 0.2s; font-size: 1.08rem;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover { background: rgba(255,255,255,0.08); border-left: 4px solid var(--primary); color: var(--primary); }
+    .header {
+      width: 100%; background: var(--bg-card); display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 2.5rem; box-shadow: 0 2px 16px rgba(30,60,180,0.10); }
+    .header .admin-title { font-size: 1.3rem; font-weight: 700; letter-spacing: -1px; }
+    .header .logout { background: #222; color: var(--primary); border: none; border-radius: 2em; padding: 0.5em 1.5em; font-weight: 700; cursor: pointer; }
+    .main-content { flex: 1; padding: 2.5rem 2rem; }
+    .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-bottom: 2.5rem; }
+    .card { background: var(--bg-card); border-radius: 1.2rem; box-shadow: 0 4px 32px rgba(30,60,180,0.10); padding: 2rem 1.5rem; display: flex; flex-direction: column; align-items: flex-start; }
+    .card .card-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 0.5rem; }
+    .card .card-value { font-size: 2.1rem; font-weight: 800; margin-bottom: 0.2rem; }
+    .card .card-desc { color: #bbb; font-size: 0.98rem; }
+    .section { margin-bottom: 2.5rem; }
+    .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-bottom: 1.2rem; }
+    .user-table, .news-table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: 1rem; overflow: hidden; }
+    .user-table th, .user-table td, .news-table th, .news-table td { padding: 0.8em 1em; text-align: left; }
+    .user-table th, .news-table th { background: rgba(255,255,255,0.10); color: var(--primary); font-weight: 700; }
+    .user-table tr:nth-child(even), .news-table tr:nth-child(even) { background: rgba(255,255,255,0.04); }
+    .user-table td, .news-table td { color: var(--text); }
+    .news-table td.content { font-size: 0.98rem; color: #eee; }
+    .form-group { margin-bottom: 1.5rem; }
+    input, textarea { width: 100%; padding: 0.7em; border-radius: 0.5em; border: none; font-size: 1rem; background: rgba(255,255,255,0.10); color: var(--text); }
+    button { background: linear-gradient(90deg, #ffe259 0%, #ffa751 100%); color: #222; font-weight: 700; cursor: pointer; border: none; border-radius: 2em; padding: 0.7em 2em; font-size: 1.08rem; transition: background 0.2s; }
     button:hover { background: linear-gradient(90deg, #fff6a9 0%, #ffd580 100%); }
-    .hidden { display: none; }
-    .user-list, .news-list { background: rgba(0,0,0,0.12); border-radius: 0.7em; padding: 1em; margin-bottom: 1.5em; }
-    .user-list li, .news-list li { margin-bottom: 0.5em; }
-    .stat { font-size: 1.2em; margin-bottom: 1em; text-align: center; }
-    .logout { float: right; background: #222; color: #ffe259; width: auto; padding: 0.4em 1.2em; margin: 0; }
-    .error { color: #ff6b6b; text-align: center; margin-bottom: 1em; }
+    .error { color: var(--danger); text-align: center; margin-bottom: 1em; }
+    @media (max-width: 900px) {
+      .admin-layout { flex-direction: column; }
+      .sidebar { width: 100%; flex-direction: row; justify-content: space-between; padding: 1rem 0.5rem; }
+      .sidebar nav { display: flex; flex-direction: row; gap: 0.5rem; }
+      .sidebar nav a { padding: 0.7rem 1rem; font-size: 1rem; }
+      .main-content { padding: 1.2rem 0.5rem; }
+      .header { padding: 1rem 1rem; }
+      .dashboard-cards { grid-template-columns: 1fr; gap: 1.2rem; }
+    }
   </style>
 </head>
 <body>
-  <div class="container" id="login-box">
-    <h1>Admin Login</h1>
-    <div class="error" id="login-error"></div>
-    <input type="password" id="admin-password" placeholder="Admin Password" autocomplete="current-password">
-    <button onclick="adminLogin()">Login</button>
-  </div>
-  <div class="container hidden" id="dashboard">
-    <button class="logout" onclick="logout()">Logout</button>
-    <h2>Admin Dashboard</h2>
-    <div class="stat">Site Visits: <span id="visit-count">...</span></div>
-    <h3>Users (Beta/Waitlist)</h3>
-    <ul class="user-list" id="user-list"></ul>
-    <h3>Post News/Update</h3>
-    <input type="text" id="news-title" placeholder="Title">
-    <textarea id="news-content" placeholder="Content" rows="4"></textarea>
-    <button onclick="postNews()">Post News</button>
-    <h3>All News/Updates</h3>
-    <ul class="news-list" id="news-list"></ul>
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <div class="logo"><i class="fa-solid fa-shield-halved"></i> Blue Mind</div>
+      <nav>
+        <a href="#" id="nav-dashboard" class="active"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+        <a href="#" id="nav-users"><i class="fa-solid fa-users"></i> Users</a>
+        <a href="#" id="nav-news"><i class="fa-solid fa-newspaper"></i> News</a>
+        <a href="#" id="nav-post"><i class="fa-solid fa-plus"></i> Post News</a>
+      </nav>
+    </aside>
+    <div style="flex:1;display:flex;flex-direction:column;">
+      <header class="header">
+        <span class="admin-title"><i class="fa-solid fa-user-shield"></i> Admin Panel</span>
+        <button class="logout" onclick="logout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+      </header>
+      <main class="main-content">
+        <div id="login-box">
+          <h2>Admin Login</h2>
+          <div class="error" id="login-error"></div>
+          <input type="password" id="admin-password" placeholder="Admin Password" autocomplete="current-password">
+          <button onclick="adminLogin()">Login</button>
+        </div>
+        <div id="dashboard-section" class="section" style="display:none;">
+          <div class="dashboard-cards">
+            <div class="card">
+              <div class="card-title">Site Visits</div>
+              <div class="card-value" id="visit-count">...</div>
+              <div class="card-desc">Total visits to the site</div>
+            </div>
+            <div class="card">
+              <div class="card-title">Users</div>
+              <div class="card-value" id="user-count">...</div>
+              <div class="card-desc">Beta/Waitlist signups</div>
+            </div>
+            <div class="card">
+              <div class="card-title">News/Updates</div>
+              <div class="card-value" id="news-count">...</div>
+              <div class="card-desc">Total news/blog posts</div>
+            </div>
+          </div>
+          <div style="background:var(--bg-card);border-radius:1.2rem;padding:2rem 1.5rem;margin-bottom:2.5rem;">
+            <canvas id="visitsChart" height="80"></canvas>
+          </div>
+        </div>
+        <div id="users-section" class="section" style="display:none;">
+          <div class="section-title"><i class="fa-solid fa-users"></i> Users</div>
+          <table class="user-table">
+            <thead><tr><th>Email</th><th>Signup Date</th></tr></thead>
+            <tbody id="user-table-body"></tbody>
+          </table>
+        </div>
+        <div id="news-section" class="section" style="display:none;">
+          <div class="section-title"><i class="fa-solid fa-newspaper"></i> News/Updates</div>
+          <table class="news-table">
+            <thead><tr><th>Title</th><th>Date</th><th class="content">Content</th></tr></thead>
+            <tbody id="news-table-body"></tbody>
+          </table>
+        </div>
+        <div id="post-section" class="section" style="display:none;">
+          <div class="section-title"><i class="fa-solid fa-plus"></i> Post News/Update</div>
+          <div class="form-group">
+            <input type="text" id="news-title" placeholder="Title">
+          </div>
+          <div class="form-group">
+            <textarea id="news-content" placeholder="Content" rows="4"></textarea>
+          </div>
+          <button onclick="postNews()">Post News</button>
+        </div>
+      </main>
+    </div>
   </div>
   <script>
     let adminPassword = '';
+    let visitsChart;
+    // Sidebar navigation
+    document.getElementById('nav-dashboard').onclick = function() { showSection('dashboard'); };
+    document.getElementById('nav-users').onclick = function() { showSection('users'); };
+    document.getElementById('nav-news').onclick = function() { showSection('news'); };
+    document.getElementById('nav-post').onclick = function() { showSection('post'); };
+    function showSection(section) {
+      document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+      document.getElementById('nav-' + section).classList.add('active');
+      document.getElementById('dashboard-section').style.display = section === 'dashboard' ? '' : 'none';
+      document.getElementById('users-section').style.display = section === 'users' ? '' : 'none';
+      document.getElementById('news-section').style.display = section === 'news' ? '' : 'none';
+      document.getElementById('post-section').style.display = section === 'post' ? '' : 'none';
+    }
     function adminLogin() {
       const pass = document.getElementById('admin-password').value;
       fetch('/api/admin/login', {
@@ -51,9 +162,12 @@
       .then(res => res.ok ? res.json() : Promise.reject('Invalid password'))
       .then(() => {
         adminPassword = pass;
-        document.getElementById('login-box').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('login-box').style.display = 'none';
+        document.getElementById('dashboard-section').style.display = '';
+        showSection('dashboard');
         loadDashboard();
+        loadUsers();
+        loadNews();
       })
       .catch(err => {
         document.getElementById('login-error').textContent = err;
@@ -61,8 +175,11 @@
     }
     function logout() {
       adminPassword = '';
-      document.getElementById('dashboard').classList.add('hidden');
-      document.getElementById('login-box').classList.remove('hidden');
+      document.getElementById('login-box').style.display = '';
+      document.getElementById('dashboard-section').style.display = 'none';
+      document.getElementById('users-section').style.display = 'none';
+      document.getElementById('news-section').style.display = 'none';
+      document.getElementById('post-section').style.display = 'none';
       document.getElementById('admin-password').value = '';
       document.getElementById('login-error').textContent = '';
     }
@@ -76,6 +193,7 @@
       .then(res => res.json())
       .then(data => {
         document.getElementById('visit-count').textContent = data.count;
+        updateVisitsChart(data.count);
       });
       // Users
       fetch('/api/admin/users', {
@@ -85,24 +203,42 @@
       })
       .then(res => res.json())
       .then(users => {
-        const ul = document.getElementById('user-list');
-        ul.innerHTML = '';
-        users.forEach(u => {
-          const li = document.createElement('li');
-          li.textContent = `${u.email} (${new Date(u.createdAt).toLocaleString()})`;
-          ul.appendChild(li);
-        });
+        document.getElementById('user-count').textContent = users.length;
       });
       // News
       fetch('/api/news')
       .then(res => res.json())
       .then(newsArr => {
-        const ul = document.getElementById('news-list');
-        ul.innerHTML = '';
+        document.getElementById('news-count').textContent = newsArr.length;
+      });
+    }
+    function loadUsers() {
+      fetch('/api/admin/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: adminPassword })
+      })
+      .then(res => res.json())
+      .then(users => {
+        const tbody = document.getElementById('user-table-body');
+        tbody.innerHTML = '';
+        users.forEach(u => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${u.email}</td><td>${new Date(u.createdAt).toLocaleString()}</td>`;
+          tbody.appendChild(tr);
+        });
+      });
+    }
+    function loadNews() {
+      fetch('/api/news')
+      .then(res => res.json())
+      .then(newsArr => {
+        const tbody = document.getElementById('news-table-body');
+        tbody.innerHTML = '';
         newsArr.forEach(n => {
-          const li = document.createElement('li');
-          li.innerHTML = `<b>${n.title}</b> <small>(${new Date(n.createdAt).toLocaleString()})</small><br>${n.content}`;
-          ul.appendChild(li);
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${n.title}</td><td>${new Date(n.createdAt).toLocaleString()}</td><td class="content">${n.content}</td>`;
+          tbody.appendChild(tr);
         });
       });
     }
@@ -120,6 +256,30 @@
         document.getElementById('news-title').value = '';
         document.getElementById('news-content').value = '';
         loadDashboard();
+        loadNews();
+        showSection('news');
+      });
+    }
+    function updateVisitsChart(visits) {
+      const ctx = document.getElementById('visitsChart').getContext('2d');
+      if (visitsChart) visitsChart.destroy();
+      visitsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Visits'],
+          datasets: [{
+            label: 'Site Visits',
+            data: [visits],
+            backgroundColor: 'rgba(255, 226, 89, 0.7)',
+            borderColor: 'rgba(255, 226, 89, 1)',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, ticks: { color: '#fff' } }, x: { ticks: { color: '#fff' } } }
+        }
       });
     }
   </script>
